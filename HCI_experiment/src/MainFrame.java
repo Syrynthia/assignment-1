@@ -16,7 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class MainFrame extends JFrame {
-	private final String[] wordList = { "onion", "carrot", "rabbit", "horse", "turtle", "chair", "table", "pencil",
+	private final String[] wordList = { "onion", "carrot", "rabbit", "horse", "turtle",
+			"chair", "table", "pencil",
 			"tissue", "window", "chimney", "brush", "phone", "laptop", "paper" };
 	private List<Integer> indexes;
 	private final int numberOfWords = 9;
@@ -42,7 +43,7 @@ public class MainFrame extends JFrame {
 		Random rnd = new Random();
 		List<String> randomElems = getRandomElems(rnd);
 		String searched = randomElems.get(indexes.remove(0));
-		task = new JLabel("Please select the word " + searched + " from the list");
+		task = new JLabel("Please select the word    from the list");
 		pane.add(task, BorderLayout.NORTH);
 		addList(searched, randomElems, pane);
 	}
@@ -76,15 +77,18 @@ public class MainFrame extends JFrame {
 							setVisible(false);
 							dispose();
 							return;
-						}
+						}		
 						Random rnd = new Random();
 						List<String> randomElems = getRandomElems(rnd);
 						String searched = randomElems.get(indexes.remove(0));
 						JLabel oldTask = task;
 						pane.remove(oldTask);
-						task = new JLabel("Please select the word " + searched + " from the list");
+						task = new JLabel("Please select the word \"" + searched + "\" from the list");
+						task2 = new JLabel("correct word has been selected");
+						pane.add(task2, BorderLayout.SOUTH);
 						pane.add(task, BorderLayout.NORTH);
 						addList(searched, randomElems, pane);
+						
 
 					}
 				});
