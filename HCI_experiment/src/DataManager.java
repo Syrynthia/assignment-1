@@ -11,19 +11,13 @@ import java.util.Map;
 import java.sql.DriverManager;
 
 public class DataManager {
-    private String JDBC_DRIVER; // "com.mysql.jdbc.Driver" 
-    private String DB_URL; // "jdbc:mysql://localhost:3306/world?useSSL=false"
-    private String USER; // "root"
-    private String PASS; // "950918"
+    private String JDBC_DRIVER = "com.mysql.jdbc.Driver" ; // "com.mysql.jdbc.Driver" 
+    private String USER = "root"; // "root"
+    private String PASS = "950918"; // "950918"
+    private String DB = "world";
+    private String DB_URL = "jdbc:mysql://localhost:3306/"+ DB +"?useSSL=false"; // "jdbc:mysql://localhost:3306/world?useSSL=false"
     Connection conn = null;
     Statement stmt = null;
-    
-    public DataManager(String JDBC_DRIVER, String DB_URL, String USER, String PASS) {
-    	this.JDBC_DRIVER = JDBC_DRIVER;
-    	this.DB_URL = DB_URL;
-    	this.USER = USER;
-    	this.PASS = PASS;	
-    }
     
     public void connectMySQL() throws ClassNotFoundException, SQLException {
     	Class.forName("com.mysql.jdbc.Driver");
@@ -96,6 +90,44 @@ public class DataManager {
    				+ list.get(8) + ")";
             stmt.executeUpdate(sql);
     }
-
-
+    
+    public void saveDataInFile(String filename, String data) {
+    	try
+        {   
+          File file = new File("./"+filename);
+      	  if (!file.exists()) {
+      		  file.createNewFile();
+      	  }
+          FileWriter fileWriter = new FileWriter(file, true); 
+          PrintWriter pw = new PrintWriter(fileWriter); 
+          pw.println(data); 
+          pw.flush(); 
+          fileWriter.close();
+        }
+        catch (IOException e)
+        {
+          e.printStackTrace();
+        }
+    }
+    public void saveData(List<String> list, boolean saveIntoDatabase, boolean saveIntoFile, String filename) {
+    	if(saveIntoDatabase) {
+    		try {
+				this.connectMySQL();
+				this.createTable1();
+				this.createTable2();
+				this.insertData(list, filename);
+				this.deconnectMySQL();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	if(saveIntoFile) {
+    		String listString = String.join(", ", list);
+    		saveDataInFile(filename+".txt", listString);
+    	}
+    }
 }
